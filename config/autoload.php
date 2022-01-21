@@ -13,3 +13,12 @@ require_once PROJECT_ROOT_PATH . "config/config.php";
 
 // include main DB Connection file
 require_once PROJECT_ROOT_PATH . "models/database.php";
+
+require_once PROJECT_ROOT_PATH . "models/databaseOperations.php";
+
+require_once PROJECT_ROOT_PATH . "models/model.php";
+require_once PROJECT_ROOT_PATH . "models/userModel.php";
+
+//controllers
+require_once PROJECT_ROOT_PATH . "controllers/controller.php";
+require_once PROJECT_ROOT_PATH . "controllers/userController.php";
