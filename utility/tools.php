@@ -26,4 +26,11 @@ trait Tools {
         $request_body = file_get_contents('php://input');
         return json_decode($request_body,true);
     }
+
+    public function serverError(string $message){
+        header('500 Internal Server Error.');
+        $error = json_encode(array('error' => 'Something went wrong! '.$message, 'success'=>false));
+        echo $error;
+        die;
+    }
 }

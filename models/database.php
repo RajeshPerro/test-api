@@ -2,10 +2,12 @@
 
  class DB
 {
+    use Tools;
+
     private static $instance = null;
     private static $dbConnect;
 
-     private $host;
+    private $host;
     private $dbName;
     private $dbUser;
     private $dbPass;
@@ -25,8 +27,7 @@
             self::$dbConnect->setAttribute(PDO::ATTR_PERSISTENT, true);
             self::$dbConnect->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
         } catch (\Exception $e) {
-            print "Error!: " . $e->getMessage() . "<br/>";
-            die();
+           $this->serverError($e->getMessage());
         }
 
     }
