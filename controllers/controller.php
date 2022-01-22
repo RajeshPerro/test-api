@@ -4,6 +4,11 @@ class Controller {
 
     use Tools;
 
+    protected $response_data = '';
+    protected $error_message = '';
+    protected $error_header = '';
+    protected $request_method = '';
+
     public function __call($name, $arguments){
         //if there is no method
         $this->sendResponse('','Invalid method!','HTTP/1.1 405 Method Not Allowed');
@@ -38,18 +43,18 @@ class Controller {
      * This method is being use to send an error
      */
     protected function invalidMethodError(){
-        $error_message = 'Method Not Supported!';
-        $error_header = 'HTTP/1.1 422 Unprocessable Entity';
-        $this->sendResponse('',$error_message,$error_header);
+        $this->error_message = 'Method Not Supported!';
+        $this->error_header = 'HTTP/1.1 422 Unprocessable Entity';
+        $this->sendResponse('',$this->error_message,$this->error_header);
     }
 
     /**
      * This method is being use to send an error
      */
     protected function invalidQueryError(){
-        $error_message = 'Invalid id / params';
-        $error_header = 'HTTP/1.1 406 Not Acceptable';
-        $this->sendResponse('',$error_message,$error_header);
+        $this->error_message = 'Invalid id / params';
+        $this->error_header = 'HTTP/1.1 406 Not Acceptable';
+        $this->sendResponse('',$this->error_message,$this->error_header);
     }
 
     /**

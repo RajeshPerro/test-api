@@ -15,10 +15,12 @@ require_once PROJECT_ROOT_PATH . "models/databaseOperations.php";
 
 require_once PROJECT_ROOT_PATH . "models/model.php";
 require_once PROJECT_ROOT_PATH . "models/userModel.php";
+require_once PROJECT_ROOT_PATH . "models/tripsModel.php";
 
 //controllers
 require_once PROJECT_ROOT_PATH . "controllers/controller.php";
 require_once PROJECT_ROOT_PATH . "controllers/userController.php";
+require_once PROJECT_ROOT_PATH . "controllers/tripsController.php";
 
 //include router
 include PROJECT_ROOT_PATH. "router/route.php";

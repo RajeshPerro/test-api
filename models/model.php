@@ -2,6 +2,8 @@
 
 class Model extends DBOperations {
 
+    use Tools;
+
     protected static $tableName;
     protected $dbConnect;
 
@@ -14,11 +16,44 @@ class Model extends DBOperations {
         $this->dbConnect = $db->getConnection();
     }
 
-    function create(string $query):int
+    function create(Array $params):int
     {
-        $statement = $this->dbConnect->prepare($query);
-        $statement->execute();
-        return $statement->rowCount();
+        $columns = $this->getColumns(self::$tableName);
+        $insert_statement = "INSERT INTO ".self::$tableName;
+        $field_name = "(";
+        $field_value = " VALUES (";
+        while(list($name,$value) = each($params)) {
+
+            if(in_array($name, $columns)){
+                if(is_bool($value)) {
+                    $field_name .= "$name,";
+                    $field_value .= ($value ? "true":"false") . ",";
+                    continue;
+                };
+
+                if(is_string($value)) {
+                    $field_name .= "$name,";
+                    $field_value .= "'$value',";
+                    continue;
+                }
+                if (!is_null($value) and ($value != "")) {
+                    $field_name .= "$name,";
+                    $field_value .= "$value,";
+                    continue;
+                }
+            }
+        }
+        $field_name[strlen($field_name)-1] = ')';
+        $field_value[strlen($field_value)-1] = ')';
+        $insert_statement .= $field_name . $field_value;
+        try{
+            $statement = $this->dbConnect->prepare($insert_statement);
+            $statement->execute();
+            $this->dbConnect = null;
+            return $statement->rowCount();
+        }catch (Exception $e){
+            $this->serverError($e->getMessage());
+        }
     }
 
     /**
@@ -47,11 +82,30 @@ class Model extends DBOperations {
 
     }
 
-    function update(string $query = "", Array $params)
+    function update(int $id , Array $params)
     {
-        $statement = $this->dbConnect->prepare($query);
-        $statement->execute($params);
-        return $statement->rowCount();
+        $allowed_columns = $this->getColumns(self::$tableName);
+        $update_data = [];
+        $set_statement = "";
+        foreach ($allowed_columns as $key)
+        {
+            if (isset($params[$key]) && $key != "id")
+            {
+                $set_statement .= "`$key` = :$key,";
+                $update_data[$key] = $params[$key];
+            }
+        }
+        $set_statement = rtrim($set_statement, ",");
+        $update_data['id'] = $id;
+        $query = "UPDATE `".self::$tableName."` SET $set_statement WHERE id = :id";
+        try {
+            $statement = $this->dbConnect->prepare($query);
+            $statement->execute($update_data);
+            $this->dbConnect = null;
+            return $statement->rowCount();
+        }catch (Exception $e){
+            $this->serverError($e->getMessage());
+        }
     }
 
     function delete(int $id = 0)
@@ -62,6 +116,7 @@ class Model extends DBOperations {
         $x = "DELETE FROM `".self::$tableName."` WHERE id = ".$id;
         $query = $this->dbConnect->prepare($x);
         $query->execute();
+        $this->dbConnect = null;
         return $query->rowCount();
     }
 
@@ -70,15 +125,18 @@ class Model extends DBOperations {
      * @param String $table_name
      * @return mixed
      */
-    private function getColumns(String $table_name):array{
+    protected function getColumns(String $table_name):array{
         $columns = [];
-
+        $unnecessary_columns = ['id','created_at','modified_at'];
         $query = $this->dbConnect->prepare("SHOW COLUMNS FROM`".$table_name."`");
         $query->execute();
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
         foreach($results as $res){
-            $columns[] = $res['Field'];
+            if(!in_array($res['Field'], $unnecessary_columns)) {
+                $columns[] = $res['Field'];
+            }
         }
     return $columns;
     }
+
 }

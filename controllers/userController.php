@@ -2,10 +2,6 @@
 
 class UserController extends Controller {
 
-    private $response_data = '';
-    private $error_message = '';
-    private $error_header = '';
-    private $request_method = '';
 
     public function __construct(){
         $this->request_method = strtoupper($_SERVER["REQUEST_METHOD"]);
@@ -29,7 +25,7 @@ class UserController extends Controller {
                 }
                 else{
                     $this->response_data =
-                        json_encode(array('message'=>'Invalid `id` param', 'success'=>false));
+                        json_encode(array('message'=>'Invalid `id` param / No Data!', 'success'=>false));
                 }
 
             }catch (ErrorException $e){
@@ -47,7 +43,9 @@ class UserController extends Controller {
     /**
      *This method is responsible for creating a user
      * call : test-api/index.php/user/create
-     * params {"username": "Rajesh","user_email": "rajesh@myapp.com","user_status": "1"}
+     * params : {"user_name": "mike","user_email": "another_test@myapp.com",
+        "password": "test_pass_23","mobile_number": "+44 78267262",
+        "address": "address_test_lodz"}
      */
     public function createAction(){
 
@@ -72,7 +70,12 @@ class UserController extends Controller {
 
         $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
-
+    /**
+     *This method is responsible for creating a user
+     * call : test-api/index.php/user/update/1
+     *  params : {"user_name": "mike","password": "test_pass_23",
+        "mobile_number": "+44 78267262","address": "address_test_lodz"}
+     */
     public function updateAction(){
         if($this->request_method == 'PUT' ) {
             $id = $this->getIdFromURI();
