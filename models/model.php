@@ -1,41 +1,38 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: rajesh
- * Date: 1/21/22
- * Time: 11:43 AM
- */
+
 class Model extends DBOperations {
 
     protected static $tableName;
-    protected $dbConnect = null;
+    protected $dbConnect;
 
     /**
      * @param String $table
      */
     public function __construct(string $table){
         self::$tableName = $table;
-
-        $db = new DB();
+        $db = DB::getInstance();
         $this->dbConnect = $db->getConnection();
     }
 
-    function create($params = [])
+    function create(string $query):int
     {
-        // TODO: Implement create() method.
+        $statement = $this->dbConnect->prepare($query);
+        $statement->execute();
+        return $statement->rowCount();
     }
 
     /**
-     * @param array $params
+     * @param int $id
      * @return array
      */
-    function read( int $id = null)
+    function read( int $id = 0)
     {
-        if(is_null($id))
+        if($id == 0)
         {
             $query = $this->dbConnect->prepare("SELECT * FROM `".self::$tableName."`");
             $query->execute();
             $results = $query->fetchAll(PDO::FETCH_ASSOC);
+            $this->dbConnect = null;
             return $results;
         }
         else
@@ -44,19 +41,28 @@ class Model extends DBOperations {
             $query = $this->dbConnect->prepare("SELECT * FROM `".self::$tableName."` WHERE `id` = ".$id);
             $query->execute();
             $result = $query->fetch(PDO::FETCH_ASSOC);
+            $this->dbConnect = null;
             return $result;
         }
 
     }
 
-    function update(string $query = "")
+    function update(string $query = "", Array $params)
     {
-        // TODO: Implement update() method.
+        $statement = $this->dbConnect->prepare($query);
+        $statement->execute($params);
+        return $statement->rowCount();
     }
 
-    function delete(int $id = null)
+    function delete(int $id = 0)
     {
-        // TODO: Implement delete() method.
+        if($id === 0){
+            return 0;
+        }
+        $x = "DELETE FROM `".self::$tableName."` WHERE id = ".$id;
+        $query = $this->dbConnect->prepare($x);
+        $query->execute();
+        return $query->rowCount();
     }
 
 

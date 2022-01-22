@@ -1,10 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: rajesh
- * Date: 1/20/22
- * Time: 9:16 PM
- */
+
 class Config {
 
     private $config;

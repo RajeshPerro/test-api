@@ -1,8 +1,0 @@
-- Make a model class with select, update, delete methods
-- make a BaseController to hold some common methods
-
-- Make a new Model : UserModel class to have user information
-- Make a new Controller : UserController class to test endpoints and DB operations
-
-- start working on real test.
-    -reserve API (Create, Update, Delete)
