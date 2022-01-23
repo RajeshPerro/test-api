@@ -36,4 +36,16 @@ class ApiCest
             "modified_at"=> "2022-01-22 21:46:56"
         ]);
     }
+
+    public function tryGetInvalidUserApi(ApiTester $I)
+    {
+        $I->sendGet('/user/get/1000000001');
+        $I->seeResponseCodeIs(200);
+        $I->seeResponseCodeIsSuccessful();
+        $I->seeResponseIsJson();
+        $I->seeResponseContainsJson([
+            "message"=> "Invalid `id` param / No Data!",
+            "success" => false,
+        ]);
+    }
 }
