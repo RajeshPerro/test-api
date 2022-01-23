@@ -49,7 +49,6 @@ class Model extends DBOperations {
         try{
             $statement = $this->dbConnect->prepare($insert_statement);
             $statement->execute();
-            $this->dbConnect = null;
             return $statement->rowCount();
         }catch (Exception $e){
             $this->serverError($e->getMessage());
@@ -57,7 +56,6 @@ class Model extends DBOperations {
     }
 
     /**
-     * @param int $id
      * @return array
      */
     function getAll()
@@ -103,7 +101,6 @@ class Model extends DBOperations {
         try {
             $statement = $this->dbConnect->prepare($query);
             $statement->execute($update_data);
-            $this->dbConnect = null;
             return $statement->rowCount();
         }catch (Exception $e){
             $this->serverError($e->getMessage());

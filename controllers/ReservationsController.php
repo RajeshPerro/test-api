@@ -5,6 +5,16 @@ class ReservationDetailsController extends Controller
 {
     use ReservationUtility;
 
+    private $error_number;
+    private $not_available_number;
+
+    /*
+     * based on the validation we send relevant error message
+     * DO NOT MODIFY THESE arrays, Unless you have valid business reasons
+    */
+    private $ERROR_MESSAGES = array("","Invalid inputs!","Invalid User id!","Invalid Trip id!");
+    private $NOT_AVAILABLE_MESSAGE = array("","Sold out!","Not enough spots");
+
     public function __construct(){
         $this->request_method = strtoupper($_SERVER["REQUEST_METHOD"]);
     }
@@ -20,34 +30,45 @@ class ReservationDetailsController extends Controller
         if($this->request_method == 'POST' ) {
             try{
                 $data = $this->parseRequestBody();
-                $trip_validation =
-                    $this->validateTripId((int)$data['trip_id'], (int) $data['number_of_spots']);
-
-                if(!$this->validateInputs($data)){
-                    $this->error_message = 'Invalid inputs!';
-                    $this->error_header = 'HTTP/1.1 400 Invalid';
+                $input_validation = $this->validateInputs($data);
+                //any type of garbage inputs
+                if(!$input_validation){
+                    $this->error_number = 1;
                 }
-                else if(!$this->validateUserId((int)$data['user_id'])){
-                    $this->error_message = 'Invalid User id!';
-                    $this->error_header = 'HTTP/1.1 400 Invalid';
-                }
-
-                else if($trip_validation === 0){
-                    $this->error_message = 'Invalid Trip id! ';
-                    $this->error_header = 'HTTP/1.1 400 Invalid';
-                }
-                else if($trip_validation === -1){
-                    $this->error_message = 'Sold out!';
-                    $this->error_header = 'HTTP/1.1 200 OK';
-                }
-                else {
-
-                    //$reserve_model = new ReservationDetailsModel();
-                    //$response = $reserve_model->createReservation($data);
-                    $response = 1;
-                    if($response){
-                        $this->response_data =
-                            json_encode(array('message'=>'OK', 'success'=>true));
+                else{
+                    //get the Trip & Spot validation result from helper method
+                    $validation_result =
+                        $this->validateTripAndSpot((int)$data['trip_id'],
+                            (int) $data['number_of_spots']);
+                    //if the userId doesn't exist
+                    if(!$this->validateUserId((int)$data['user_id'])){
+                        $this->error_number = 2;
+                    }
+                    //if the tripId doesn't exist
+                    else if($validation_result === 0){
+                        $this->error_number = 3;
+                    }
+                    //if all are sold out in a specific trip
+                    else if($validation_result === -1){
+                        $this->not_available_number = 1;
+                    }
+                    //if user request more tickets than the availability
+                    else if($validation_result === -2){
+                        $this->not_available_number = 2;
+                    }
+                    else {
+                        //if everything is ok, we proceed with reservation
+                        $data['total_spot'] = $validation_result;
+                        $reserve_model = new ReservationDetailsModel();
+                        $response = $reserve_model->createReservation($data);
+                        if($response){
+                            $this->response_data =
+                                json_encode(array('message'=>'OK', 'success'=>true));
+                        }
+                        else{
+                            $this->error_message = 'Something went wrong!';
+                            $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+                        }
                     }
                 }
 
@@ -59,6 +80,15 @@ class ReservationDetailsController extends Controller
         }
         else{
             $this->invalidMethodError();
+        }
+        var_dump($this->not_available_number);
+        if($this->error_number){
+            $this->error_message = $this->ERROR_MESSAGES[$this->error_number];
+            $this->error_header = 'HTTP/1.1 400 Invalid';
+        }
+        if($this->not_available_number){
+            $this->error_message = $this->NOT_AVAILABLE_MESSAGE[$this->not_available_number];
+            $this->error_header = 'HTTP/1.1 200 OK';
         }
 
         $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
@@ -77,20 +107,24 @@ class ReservationDetailsController extends Controller
 
     /**
      * This method will validate a valid tripId, also it will return
-     current available 'total_spots' for a valid id.
+     * current available 'total_spots' for a valid id.
      * @param int $id
+     * @param int $require_spots
      * @return int
      */
-    private function validateTripId( int $id, int $require_spots):int{
-        var_dump($id);
+    private function validateTripAndSpot( int $id, int $require_spots) : int {
         $trip_model = new TripsModel();
         $response = $trip_model->getTripById($id);
-        var_dump($response);
         if($response)
         {
             $available_spots = (int)$response['total_spot'];
-            if($require_spots > $available_spots) return -1;
-            else return $available_spots;
+
+            if($available_spots === 0)
+                return -1;
+            else if($available_spots < $require_spots)
+                return -2;
+            else
+              return $available_spots;
         }
         else return 0;
     }

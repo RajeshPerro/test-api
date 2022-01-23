@@ -12,9 +12,31 @@ class ReservationDetailsModel extends Model
 
     /**
      * @param array $params
-     * @return int
+     * @return bool
      */
-    public function createReservation(Array $params):int{
-        return $this->create($params);
+    public function createReservation(Array $params):bool{
+        try{
+
+            if(!isset($params['total_spot'])) return false;
+
+            $trip_params['total_spot'] = $params['total_spot'] - (int)$params['number_of_spots'];
+            unset($params['total_spot']);
+
+            $this->dbConnect->beginTransaction();
+
+            $this->create($params);
+
+            $trip_model = new TripsModel();
+            $trip_model->updateTrip((int)$params['trip_id'], $trip_params);
+
+            $this->dbConnect->commit();
+            return true;
+
+        }catch (Exception $e){
+            if($e->getMessage()){
+                $this->dbConnect->rollBack();
+                return false;
+            }
+        }
     }
 }

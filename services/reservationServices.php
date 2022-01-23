@@ -18,14 +18,4 @@ trait ReservationUtility {
         }
         return true;
     }
-
-    /**
-     * @param int $require_spots
-     * @param $available_spots
-     * @return bool
-     */
-    protected function validateSpots(int $require_spots, $available_spots):bool{
-        if($require_spots > $available_spots) return false;
-        return true;
-    }
 }
