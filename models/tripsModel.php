@@ -9,11 +9,18 @@ class TripsModel extends Model{
     }
 
     /**
-     * @param int|null $id
      * @return array
      */
-    public function getTrips(int $id = null){
-        return $this->read($id);
+    public function getTrips(){
+      return $this->getAll();
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function getTripById(int $id){
+        return $this->getById($id);
     }
 
     /**

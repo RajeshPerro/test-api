@@ -50,7 +50,12 @@ class TripsController extends Controller
             $id = $this->getIdFromURI();
             try{
                 $trip_model = new TripsModel();
-                $response = $trip_model->read($id);
+                if(isset($id) && $id > 0){
+                    $response = $trip_model->getTripById($id);
+                }
+                else {
+                    $response = $trip_model->getTrips();
+                }
                 if($response){
                     $this->response_data = json_encode($response);
                 }

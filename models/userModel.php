@@ -9,11 +9,18 @@ class UserModel extends Model{
     }
 
     /**
-     * @param int|null $id
      * @return array
      */
-    public function getUsers(int $id = null){
-        return $this->read($id);
+    public function getUsers(){
+        return $this->getAll();
+    }
+
+    /**
+     * @param int $id
+     * @return array
+     */
+    public function getUserById(int $id){
+        return $this->getById($id);
     }
 
     /**

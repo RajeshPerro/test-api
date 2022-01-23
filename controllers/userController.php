@@ -19,7 +19,12 @@ class UserController extends Controller {
             $id = $this->getIdFromURI();
             try{
                 $user_model = new UserModel();
-                $response = $user_model->read($id);
+                if(isset($id) && $id > 0){
+                    $response = $user_model->getUserById($id);
+                }
+                else {
+                    $response = $user_model->getUsers();
+                }
                 if($response){
                     $this->response_data = json_encode($response);
                 }

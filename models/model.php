@@ -60,26 +60,28 @@ class Model extends DBOperations {
      * @param int $id
      * @return array
      */
-    function read( int $id = 0)
+    function getAll()
     {
-        if($id == 0)
-        {
-            $query = $this->dbConnect->prepare("SELECT * FROM `".self::$tableName."`");
-            $query->execute();
-            $results = $query->fetchAll(PDO::FETCH_ASSOC);
-            $this->dbConnect = null;
-            return $results;
-        }
-        else
-        {
+        $query = $this->dbConnect->prepare("SELECT * FROM `".self::$tableName."`");
+        $query->execute();
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+        $this->dbConnect = null;
+        return $results;
+    }
 
-            $query = $this->dbConnect->prepare("SELECT * FROM `".self::$tableName."` WHERE `id` = ".$id);
-            $query->execute();
-            $result = $query->fetch(PDO::FETCH_ASSOC);
-            $this->dbConnect = null;
-            return $result;
-        }
+    /**
+     * @param int $id
+     * @return int|mixed
+     */
+    function getById(int $id = 0){
 
+        if($id == 0) return 0;
+
+        $query = $this->dbConnect->prepare("SELECT * FROM `".self::$tableName."` WHERE `id` = ".$id);
+        $query->execute();
+        $result = $query->fetch(PDO::FETCH_ASSOC);
+        $this->dbConnect = null;
+        return $result;
     }
 
     function update(int $id , Array $params)

@@ -37,10 +37,9 @@ elseif($tripEndPoints){
     $objFeedController->{$method_to_call}();
 }
 elseif($reserveEndPoints){
-    header('Content-Type: application/json');
-    header("HTTP/1.1 404 Not Found");
-    echo $response;
-    exit();
+    $objFeedController = new ReservationDetailsController();
+    $method_to_call = $uri[4].'Action';
+    $objFeedController->{$method_to_call}();
 }
 else{
     header('Content-Type: application/json');
