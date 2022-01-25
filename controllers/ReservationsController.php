@@ -149,38 +149,5 @@ class ReservationDetailsController extends Controller
 
         $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
-    /**
-     * This method is to check if we get valid userId with input / not.
-     * @param int $id
-     * @return bool
-     */
 
-    private function validateUserId(int $id):bool{
-        $user_model = new UserModel();
-        return $user_model->getUserById($id) ? true : false;
-    }
-
-    /**
-     * This method will validate a valid tripId, also it will return
-     * current available 'total_spots' for a valid id.
-     * @param int $id
-     * @param int $require_spots
-     * @return int
-     */
-    private function validateTripAndSpot( int $id, int $require_spots) : int {
-        $trip_model = new TripsModel();
-        $response = $trip_model->getTripById($id);
-        if($response)
-        {
-            $available_spots = (int)$response['total_spot'];
-
-            if($available_spots === 0)
-                return -1;
-            else if($available_spots < $require_spots)
-                return -2;
-            else
-              return $available_spots;
-        }
-        else return 0;
-    }
 }
