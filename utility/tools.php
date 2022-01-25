@@ -13,6 +13,31 @@ trait Tools {
         return  $this->uri;
     }
 
+    /**This method is being use for validate get reservations requests
+     * We allow only admin with correct credentials to visit the endpoint
+     * This method get the already set username and password from app.ini
+     * and then check with the username and password passed via headers with the
+     * request
+     * @return bool
+     */
+    public function validateAdmin() : bool{
+       $headers = getallheaders();
+        if(isset($headers['username']) && isset($headers['password'])){
+
+            $config = new Config();
+            $config_data = $config->getConfig();
+
+            if(!isset($config_data['username']) && !isset($config_data['password'])){
+               $this->serverError('Check your configuration file!');
+                return false;
+            }
+            if($headers['username'] === $config_data['username'] &&
+                $config_data['password'] === $headers['password']){
+                return true;
+            }
+        }
+        return false;
+    }
     /**
      * This method will give us the ID from the URL
      * eg. localhost/test-api/index.php/trip/get/2 : it will give us the '2'

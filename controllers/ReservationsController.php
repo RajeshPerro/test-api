@@ -150,4 +150,40 @@ class ReservationDetailsController extends Controller
         $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
 
+    /**
+     * This method brings all the ACTIVE reservation details for admin only
+     * header parameters : username : admin
+      password : 4699c34482129452703a7d58e1a4849e
+     * call : test-api/index.php/reserve/get
+     */
+    public function getAction(){
+
+        if($this->request_method == 'GET'){
+            try{
+                if($this->validateAdmin()){
+                    $reservation_model = new ReservationDetailsModel();
+                    $response = $reservation_model->getReservationDetails();
+                    if($response){
+                        $this->response_data = json_encode($response);
+                    }
+                    else{
+                        $this->response_data =
+                            json_encode(array('message'=>'No data!', 'success'=>true));
+                    }
+                }
+                else{
+                    $this->error_message = 'Invalid credentials!';
+                    $this->error_header = 'HTTP/1.1 401 Internal Server Error';
+                }
+            }catch (ErrorException $e){
+                $this->serverError($e->getMessage());
+            }
+        }
+        else{
+            $this->invalidMethodError();
+        }
+
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+    }
+
 }
