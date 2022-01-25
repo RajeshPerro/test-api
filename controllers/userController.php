@@ -2,6 +2,7 @@
 
 class UserController extends Controller {
 
+    use Tools;
 
     public function __construct(){
         $this->request_method = strtoupper($_SERVER["REQUEST_METHOD"]);
@@ -34,8 +35,7 @@ class UserController extends Controller {
                 }
 
             }catch (ErrorException $e){
-                $this->error_message = $e->getMessage().'Something went wrong!';
-                $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+                $this->serverError($e->getMessage());
             }
         }
         else{
@@ -63,9 +63,11 @@ class UserController extends Controller {
                     $this->response_data =
                         json_encode(array('message'=>'User Created!', 'success'=>true));
                 }
+                else{
+                    $this->serverError('');
+                }
             }catch (ErrorException $e){
-                $this->error_message = $e->getMessage().'Something went wrong!';
-                $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+                $this->serverError($e->getMessage());
             }
 
         }
@@ -97,8 +99,7 @@ class UserController extends Controller {
                         json_encode(array('message'=>'Invalid `id` param', 'success'=>false));
                 }
             }catch (ErrorException $e){
-                $this->error_message = $e->getMessage().'Something went wrong!';
-                $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+                $this->serverError($e->getMessage());
             }
 
         }
@@ -129,8 +130,7 @@ class UserController extends Controller {
                         json_encode(array('message'=>'Invalid `id` param', 'success'=>false));
                 }
             }catch (ErrorException $e){
-                $this->error_message = $e->getMessage().'Something went wrong!';
-                $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+                $this->serverError($e->getMessage());
             }
 
         }

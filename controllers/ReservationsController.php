@@ -4,6 +4,7 @@
 class ReservationDetailsController extends Controller
 {
     use ReservationUtility;
+    use Tools;
 
     private $error_number;
     private $not_available_number;
@@ -61,20 +62,19 @@ class ReservationDetailsController extends Controller
                         $data['total_spot'] = $validation_result;
                         $reserve_model = new ReservationDetailsModel();
                         $response = $reserve_model->createReservation($data);
+
                         if($response){
                             $this->response_data =
                                 json_encode(array('message'=>'OK', 'success'=>true));
                         }
                         else{
-                            $this->error_message = 'Something went wrong!';
-                            $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+                            $this->serverError('');
                         }
                     }
                 }
 
             }catch (ErrorException $e){
-                $this->error_message = $e->getMessage().'Something went wrong!';
-                $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+                $this->serverError($e->getMessage());
             }
 
         }
