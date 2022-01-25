@@ -63,7 +63,6 @@ class Model extends DBOperations {
         $query = $this->dbConnect->prepare("SELECT * FROM `".self::$tableName."`");
         $query->execute();
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
-        $this->dbConnect = null;
         return $results;
     }
 
@@ -78,7 +77,6 @@ class Model extends DBOperations {
         $query = $this->dbConnect->prepare("SELECT * FROM `".self::$tableName."` WHERE `id` = ".$id);
         $query->execute();
         $result = $query->fetch(PDO::FETCH_ASSOC);
-        $this->dbConnect = null;
         return $result;
     }
 
@@ -107,6 +105,10 @@ class Model extends DBOperations {
         }
     }
 
+    /**
+     * @param int $id
+     * @return int
+     */
     function delete(int $id = 0)
     {
         if($id === 0){
@@ -115,7 +117,6 @@ class Model extends DBOperations {
         $x = "DELETE FROM `".self::$tableName."` WHERE id = ".$id;
         $query = $this->dbConnect->prepare($x);
         $query->execute();
-        $this->dbConnect = null;
         return $query->rowCount();
     }
 
@@ -138,4 +139,14 @@ class Model extends DBOperations {
     return $columns;
     }
 
+    /**
+     * @param String $query
+     * @return mixed
+     */
+    protected function runCustomQuery(String $query =""):array{
+        $statement = $this->dbConnect->prepare($query);
+        $statement->execute();
+        $response = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $response;
+    }
 }

@@ -12,7 +12,7 @@ class ReservationDetailsController extends Controller
      * based on the validation we send relevant error message
      * DO NOT MODIFY THESE arrays, Unless you have valid business reasons
     */
-    private $ERROR_MESSAGES = array("","Invalid inputs!","Invalid User id!","Invalid Trip id!");
+    private $ERROR_MESSAGES = array("","Invalid inputs!","Invalid User id!","Invalid Trip id!","Invalid request!");
     private $NOT_AVAILABLE_MESSAGE = array("","Sold out!","Not enough spots");
 
     public function __construct(){
@@ -81,7 +81,7 @@ class ReservationDetailsController extends Controller
         else{
             $this->invalidMethodError();
         }
-        var_dump($this->not_available_number);
+        //check the final error code and set proper message
         if($this->error_number){
             $this->error_message = $this->ERROR_MESSAGES[$this->error_number];
             $this->error_header = 'HTTP/1.1 400 Invalid';
@@ -94,6 +94,61 @@ class ReservationDetailsController extends Controller
         $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
 
+    /**
+     *This method is responsible for cancelling a reservation
+     * call : test-api/index.php/reserve/cancel/{id}
+     * params optional: {"number_of_spots": 2,"cancel_reason": "Cancel the tickets"}
+     */
+    public function cancelAction(){
+        if($this->request_method == 'PUT' ) {
+            $id = $this->getIdFromURI();
+            try{
+                $params = $this->parseRequestBody();
+                $cancel_reason = isset($params['cancel_reason'])?$params['cancel_reason']:'';
+
+                if(!$this->validateCancelRequest($params)){
+                    //this means number_of_spot set but invalid data
+                    $this->error_message = $this->ERROR_MESSAGES[1];
+                    $this->error_header = 'HTTP/1.1 400 Invalid';
+                }
+                elseif(!$this->validateDateOfCancel($id)){
+                    $this->error_message = $this->ERROR_MESSAGES[4];
+                    $this->error_header = 'HTTP/1.1 400 Invalid';
+                }
+                else{
+                    /*
+                     * 1. number_of_spot is set with a valid data
+                     * 2. number of spot not set at all (so cancel all)
+                    */
+                    $data['number_of_spots'] =
+                        isset($params['number_of_spots'])?(int)$params['number_of_spots']:0;
+                    $data['cancel_reason'] = $cancel_reason;
+
+                    $reserve_model = new ReservationDetailsModel();
+                    $response = $reserve_model->updateReservation($id, $data);
+
+                    if($response){
+                        $this->response_data =
+                            json_encode(array('message'=>"$response spots are cancelled!", 'success'=>true));
+                    }
+                    else{
+                        $this->response_data =
+                            json_encode(array('message'=>'Invalid `id`/ param', 'success'=>false));
+                    }
+                }
+
+            }catch (ErrorException $e){
+                $this->error_message = $e->getMessage().'Something went wrong!';
+                $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+            }
+
+        }
+        else{
+            $this->invalidMethodError();
+        }
+
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+    }
     /**
      * This method is to check if we get valid userId with input / not.
      * @param int $id
