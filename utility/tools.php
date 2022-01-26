@@ -38,6 +38,7 @@ trait Tools {
         }
         return false;
     }
+    
     /**
      * This method will give us the ID from the URL
      * eg. localhost/test-api/index.php/trip/get/2 : it will give us the '2'
