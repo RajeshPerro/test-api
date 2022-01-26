@@ -193,5 +193,4 @@ class ReservationDetailsController extends Controller
         $this->sendResponse($this->response_data, $this->status_header,
             $this->error_message,$this->error_header);
     }
-
 }

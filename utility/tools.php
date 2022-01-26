@@ -21,14 +21,14 @@ trait Tools {
      * @return bool
      */
     public function validateAdmin() : bool{
-       $headers = getallheaders();
+        $headers = getallheaders();
         if(isset($headers['username']) && isset($headers['password'])){
 
             $config = new Config();
             $config_data = $config->getConfig();
 
             if(!isset($config_data['username']) && !isset($config_data['password'])){
-               $this->serverError('Check your configuration file!');
+                $this->serverError('Check your configuration file!');
                 return false;
             }
             if($headers['username'] === $config_data['username'] &&

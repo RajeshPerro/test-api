@@ -40,19 +40,9 @@ class ReservationDetailsModel extends Model
         }
     }
 
-    /**
-     * This method helps us to run a raw query for checking out
-     * reservation details for a admin.
-     * @return mixed
-     */
     public function getReservationDetails():array{
-        $query = "SELECT u.user_name as userName, rd.number_of_spots as numberOfSpots,
-rd.modified_at as bookingDateAndTime,
-t.name as tripName, t.trip_date as travelDateAndTime
-FROM reservation_details rd
-JOIN users u ON u.id = rd.user_id
-JOIN trips t ON t.id = rd.trip_id
-WHERE rd.`is_active` = 1 ORDER BY rd.`modified_at`";
+        $query = "SELECT * FROM ".self::$tableName.
+            " WHERE `is_active` = 1 ORDER BY `modified_at` DESC";
         return $this->runCustomQuery($query);
     }
 

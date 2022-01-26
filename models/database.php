@@ -26,7 +26,6 @@
             self::$dbConnect->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$dbConnect->setAttribute(PDO::ATTR_PERSISTENT, true);
             self::$dbConnect->setAttribute(PDO::MYSQL_ATTR_USE_BUFFERED_QUERY, false);
-            self::$dbConnect->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         } catch (Exception $e) {
            $this->serverError($e->getMessage());
         }
