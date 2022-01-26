@@ -6,7 +6,7 @@ class Controller {
 
     protected $response_data = '';
     protected $error_message = '';
-    protected $error_header = '';
+    protected $header_with_code = '';
     protected $request_method = '';
 
     public function __call($name, $arguments){
@@ -14,12 +14,6 @@ class Controller {
         $this->sendResponse('','Invalid method!','HTTP/1.1 405 Method Not Allowed');
     }
 
-    /**
-     * @param string $query
-     */
-    protected function getQueryStringParams(string $query){
-        return parse_str($_SERVER['QUERY_STRING'],$query);
-    }
 
     /**
      * This method is responsible to prepare any kind of response
@@ -44,8 +38,8 @@ class Controller {
      */
     protected function invalidMethodError(){
         $this->error_message = 'Method Not Supported!';
-        $this->error_header = 'HTTP/1.1 422 Unprocessable Entity';
-        $this->sendResponse('',$this->error_message,$this->error_header);
+        $this->header_with_code = 'HTTP/1.1 422 Unprocessable Entity';
+        $this->sendResponse('',$this->error_message,$this->header_with_code);
     }
 
     /**
@@ -53,25 +47,25 @@ class Controller {
      */
     protected function invalidQueryError(){
         $this->error_message = 'Invalid id / params';
-        $this->error_header = 'HTTP/1.1 406 Not Acceptable';
-        $this->sendResponse('',$this->error_message,$this->error_header);
+        $this->header_with_code = 'HTTP/1.1 406 Not Acceptable';
+        $this->sendResponse('',$this->error_message,$this->header_with_code);
     }
 
     /**
      * This method is being use to send any response we have for our caller
      * @param string $response_to_send
      * @param string $error_message
-     * @param string $error_header
+     * @param string $header_with_code
      */
     protected function sendResponse(string $response_to_send,
-                                    string $error_message, string $error_header){
+                                    string $error_message, string $header_with_code){
         if($error_message == ''){
             $this->prepareResponse($response_to_send,
                 array('Content-Type: application/json', 'HTTP/1.1 200 OK'));
         }
         else{
             $this->prepareResponse(json_encode(array('error' => $error_message, 'success'=>false)),
-                array('Content-Type: application/json', $error_header)
+                array('Content-Type: application/json', $header_with_code)
             );
         }
     }

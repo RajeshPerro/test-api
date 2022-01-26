@@ -84,14 +84,14 @@ class ReservationDetailsController extends Controller
         //check the final error code and set proper message
         if($this->error_number){
             $this->error_message = $this->ERROR_MESSAGES[$this->error_number];
-            $this->error_header = 'HTTP/1.1 400 Invalid';
+            $this->header_with_code = 'HTTP/1.1 400 Invalid';
         }
         if($this->not_available_number){
             $this->error_message = $this->NOT_AVAILABLE_MESSAGE[$this->not_available_number];
-            $this->error_header = 'HTTP/1.1 200 OK';
+            $this->header_with_code = 'HTTP/1.1 200 OK';
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->header_with_code);
     }
 
     /**
@@ -109,11 +109,11 @@ class ReservationDetailsController extends Controller
                 if(!$this->validateCancelRequest($params)){
                     //this means number_of_spot set but invalid data
                     $this->error_message = $this->ERROR_MESSAGES[1];
-                    $this->error_header = 'HTTP/1.1 400 Invalid';
+                    $this->header_with_code = 'HTTP/1.1 400 Invalid';
                 }
                 elseif(!$this->validateDateOfCancel($id)){
                     $this->error_message = $this->ERROR_MESSAGES[4];
-                    $this->error_header = 'HTTP/1.1 400 Invalid';
+                    $this->header_with_code = 'HTTP/1.1 400 Invalid';
                 }
                 else{
                     /*
@@ -139,7 +139,7 @@ class ReservationDetailsController extends Controller
 
             }catch (ErrorException $e){
                 $this->error_message = $e->getMessage().'Something went wrong!';
-                $this->error_header = 'HTTP/1.1 500 Internal Server Error';
+                $this->header_with_code = 'HTTP/1.1 500 Internal Server Error';
             }
 
         }
@@ -147,7 +147,7 @@ class ReservationDetailsController extends Controller
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->header_with_code);
     }
 
     /**
@@ -173,7 +173,7 @@ class ReservationDetailsController extends Controller
                 }
                 else{
                     $this->error_message = 'Invalid credentials!';
-                    $this->error_header = 'HTTP/1.1 401 Internal Server Error';
+                    $this->header_with_code = 'HTTP/1.1 401 Internal Server Error';
                 }
             }catch (ErrorException $e){
                 $this->serverError($e->getMessage());
@@ -183,6 +183,6 @@ class ReservationDetailsController extends Controller
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->header_with_code);
     }
 }

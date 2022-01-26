@@ -38,7 +38,7 @@ class TripsController extends Controller
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->header_with_code);
     }
 
     /**
@@ -75,7 +75,7 @@ class TripsController extends Controller
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->header_with_code);
     }
 
     /**
@@ -108,6 +108,6 @@ class TripsController extends Controller
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->header_with_code);
     }
 }
