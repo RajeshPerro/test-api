@@ -28,12 +28,10 @@ class UserController extends Controller {
                 }
                 if($response){
                     $this->response_data = json_encode($response);
-                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
                 else{
                     $this->response_data =
                         json_encode(array('message'=>'Invalid `id` param / No Data!', 'success'=>false));
-                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
 
             }catch (ErrorException $e){
@@ -44,16 +42,15 @@ class UserController extends Controller {
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->status_header,
-            $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
 
     /**
      *This method is responsible for creating a user
      * call : test-api/index.php/user/create
      * params : {"user_name": "mike","user_email": "another_test@myapp.com",
-        "password": "test_pass_23","mobile_number": "+44 78267262",
-        "address": "address_test_lodz"}
+    "password": "test_pass_23","mobile_number": "+44 78267262",
+    "address": "address_test_lodz"}
      */
     public function createAction(){
 
@@ -65,7 +62,6 @@ class UserController extends Controller {
                 if($response){
                     $this->response_data =
                         json_encode(array('message'=>'User Created!', 'success'=>true));
-                    $this->status_header = 'HTTP/1.1 201 OK';
                 }
                 else{
                     $this->serverError('');
@@ -79,14 +75,13 @@ class UserController extends Controller {
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->status_header,
-            $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
     /**
      *This method is responsible for creating a user
      * call : test-api/index.php/user/update/1
      *  params : {"user_name": "mike","password": "test_pass_23",
-        "mobile_number": "+44 78267262","address": "address_test_lodz"}
+    "mobile_number": "+44 78267262","address": "address_test_lodz"}
      */
     public function updateAction(){
         if($this->request_method == 'PUT' ) {
@@ -98,12 +93,10 @@ class UserController extends Controller {
                 if($response){
                     $this->response_data =
                         json_encode(array('message'=>'User Updated!', 'success'=>true));
-                    $this->status_header = 'HTTP/1.1 204 OK';
                 }
                 else{
                     $this->response_data =
                         json_encode(array('message'=>'Invalid `id` param', 'success'=>false));
-                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
             }catch (ErrorException $e){
                 $this->serverError($e->getMessage());
@@ -114,8 +107,7 @@ class UserController extends Controller {
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->status_header,
-            $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
 
     /**
@@ -132,12 +124,10 @@ class UserController extends Controller {
                 if($response){
                     $this->response_data =
                         json_encode(array('message'=>'User Deleted!', 'success'=>true));
-                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
                 else{
                     $this->response_data =
                         json_encode(array('message'=>'Invalid `id` param', 'success'=>false));
-                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
             }catch (ErrorException $e){
                 $this->serverError($e->getMessage());
@@ -148,7 +138,6 @@ class UserController extends Controller {
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data,$this->status_header,
-            $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
 }

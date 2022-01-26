@@ -66,7 +66,6 @@ class ReservationDetailsController extends Controller
                         if($response){
                             $this->response_data =
                                 json_encode(array('message'=>'OK', 'success'=>true));
-                            $this->status_header = 'HTTP/1.1 200 OK';
                         }
                         else{
                             $this->serverError('');
@@ -92,8 +91,7 @@ class ReservationDetailsController extends Controller
             $this->error_header = 'HTTP/1.1 200 OK';
         }
 
-        $this->sendResponse($this->response_data, $this->status_header,
-            $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
 
     /**
@@ -132,12 +130,10 @@ class ReservationDetailsController extends Controller
                     if($response){
                         $this->response_data =
                             json_encode(array('message'=>"$response spots are cancelled!", 'success'=>true));
-                        $this->status_header = 'HTTP/1.1 200 OK';
                     }
                     else{
                         $this->response_data =
                             json_encode(array('message'=>'Invalid `id`/ param', 'success'=>false));
-                        $this->status_header = 'HTTP/1.1 200 OK';
                     }
                 }
 
@@ -151,14 +147,13 @@ class ReservationDetailsController extends Controller
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data,$this->status_header,
-            $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
 
     /**
      * This method brings all the ACTIVE reservation details for admin only
      * header parameters : username : admin
-      password : 4699c34482129452703a7d58e1a4849e
+    password : 4699c34482129452703a7d58e1a4849e
      * call : test-api/index.php/reserve/get
      */
     public function getAction(){
@@ -170,12 +165,10 @@ class ReservationDetailsController extends Controller
                     $response = $reservation_model->getReservationDetails();
                     if($response){
                         $this->response_data = json_encode($response);
-                        $this->status_header = 'HTTP/1.1 200 OK';
                     }
                     else{
                         $this->response_data =
                             json_encode(array('message'=>'No data!', 'success'=>true));
-                        $this->status_header = 'HTTP/1.1 200 OK';
                     }
                 }
                 else{
@@ -190,7 +183,6 @@ class ReservationDetailsController extends Controller
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->status_header,
-            $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
     }
 }
