@@ -5,13 +5,14 @@ class Controller {
     use Tools;
 
     protected $response_data = '';
+    protected $status_header = '';
     protected $error_message = '';
     protected $error_header = '';
     protected $request_method = '';
 
     public function __call($name, $arguments){
         //if there is no method
-        $this->sendResponse('','Invalid method!','HTTP/1.1 405 Method Not Allowed');
+        $this->sendResponse('','','Invalid method!','HTTP/1.1 405 Method Not Allowed');
     }
 
     /**
@@ -45,7 +46,7 @@ class Controller {
     protected function invalidMethodError(){
         $this->error_message = 'Method Not Supported!';
         $this->error_header = 'HTTP/1.1 422 Unprocessable Entity';
-        $this->sendResponse('',$this->error_message,$this->error_header);
+        $this->sendResponse('','',$this->error_message,$this->error_header);
     }
 
     /**
@@ -54,7 +55,7 @@ class Controller {
     protected function invalidQueryError(){
         $this->error_message = 'Invalid id / params';
         $this->error_header = 'HTTP/1.1 406 Not Acceptable';
-        $this->sendResponse('',$this->error_message,$this->error_header);
+        $this->sendResponse('','',$this->error_message,$this->error_header);
     }
 
     /**
@@ -63,11 +64,11 @@ class Controller {
      * @param string $error_message
      * @param string $error_header
      */
-    protected function sendResponse(string $response_to_send,
+    protected function sendResponse(string $response_to_send, string $status_header,
                                     string $error_message, string $error_header){
         if($error_message == ''){
             $this->prepareResponse($response_to_send,
-                array('Content-Type: application/json', 'HTTP/1.1 200 OK'));
+                array('Content-Type: application/json', $status_header));
         }
         else{
             $this->prepareResponse(json_encode(array('error' => $error_message, 'success'=>false)),

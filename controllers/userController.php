@@ -28,10 +28,12 @@ class UserController extends Controller {
                 }
                 if($response){
                     $this->response_data = json_encode($response);
+                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
                 else{
                     $this->response_data =
                         json_encode(array('message'=>'Invalid `id` param / No Data!', 'success'=>false));
+                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
 
             }catch (ErrorException $e){
@@ -42,7 +44,8 @@ class UserController extends Controller {
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->status_header,
+            $this->error_message,$this->error_header);
     }
 
     /**
@@ -62,6 +65,7 @@ class UserController extends Controller {
                 if($response){
                     $this->response_data =
                         json_encode(array('message'=>'User Created!', 'success'=>true));
+                    $this->status_header = 'HTTP/1.1 201 OK';
                 }
                 else{
                     $this->serverError('');
@@ -75,7 +79,8 @@ class UserController extends Controller {
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->status_header,
+            $this->error_message,$this->error_header);
     }
     /**
      *This method is responsible for creating a user
@@ -93,10 +98,12 @@ class UserController extends Controller {
                 if($response){
                     $this->response_data =
                         json_encode(array('message'=>'User Updated!', 'success'=>true));
+                    $this->status_header = 'HTTP/1.1 204 OK';
                 }
                 else{
                     $this->response_data =
                         json_encode(array('message'=>'Invalid `id` param', 'success'=>false));
+                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
             }catch (ErrorException $e){
                 $this->serverError($e->getMessage());
@@ -107,7 +114,8 @@ class UserController extends Controller {
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data, $this->status_header,
+            $this->error_message,$this->error_header);
     }
 
     /**
@@ -124,10 +132,12 @@ class UserController extends Controller {
                 if($response){
                     $this->response_data =
                         json_encode(array('message'=>'User Deleted!', 'success'=>true));
+                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
                 else{
                     $this->response_data =
                         json_encode(array('message'=>'Invalid `id` param', 'success'=>false));
+                    $this->status_header = 'HTTP/1.1 200 OK';
                 }
             }catch (ErrorException $e){
                 $this->serverError($e->getMessage());
@@ -138,6 +148,7 @@ class UserController extends Controller {
             $this->invalidMethodError();
         }
 
-        $this->sendResponse($this->response_data, $this->error_message,$this->error_header);
+        $this->sendResponse($this->response_data,$this->status_header,
+            $this->error_message,$this->error_header);
     }
 }
