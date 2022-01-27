@@ -25,6 +25,7 @@ class TripsController extends Controller
                 if($response){
                     $this->response_data =
                         json_encode(array('message'=>'Trip Created!', 'success'=>true));
+                    $this->header_with_code = 'HTTP/1.1 201 OK';
                 }
                 else{
                     $this->serverError('');

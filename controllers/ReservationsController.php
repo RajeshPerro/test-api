@@ -66,6 +66,7 @@ class ReservationDetailsController extends Controller
                         if($response){
                             $this->response_data =
                                 json_encode(array('message'=>'OK', 'success'=>true));
+                            $this->header_with_code = 'HTTP/1.1 201 OK';
                         }
                         else{
                             $this->serverError('');

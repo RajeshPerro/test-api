@@ -60,8 +60,14 @@ class Controller {
     protected function sendResponse(string $response_to_send,
                                     string $error_message, string $header_with_code){
         if($error_message == ''){
-            $this->prepareResponse($response_to_send,
-                array('Content-Type: application/json', 'HTTP/1.1 200 OK'));
+            if($header_with_code != ''){
+                $this->prepareResponse($response_to_send,
+                    array('Content-Type: application/json', $header_with_code));
+            }else{
+                $this->prepareResponse($response_to_send,
+                    array('Content-Type: application/json', 'HTTP/1.1 200 OK'));
+            }
+
         }
         else{
             $this->prepareResponse(json_encode(array('error' => $error_message, 'success'=>false)),
