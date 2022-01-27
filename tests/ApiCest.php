@@ -38,7 +38,7 @@ class ApiCest
         $I->seeResponseCodeIsSuccessful();
         $I->seeResponseIsJson();
         $I->seeResponseContainsJson([
-            "message"=> "Invalid `id` param / No Data!",
+            "message"=> "Invalid id, No Data!",
             "success" => false,
         ]);
     }

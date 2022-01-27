@@ -49,10 +49,11 @@ class Model extends DBOperations {
         try{
             $statement = $this->dbConnect->prepare($insert_statement);
             $statement->execute();
-            return $statement->rowCount();
+            return $this->dbConnect->lastInsertId();
         }catch (Exception $e){
             $this->serverError($e->getMessage());
         }
+        return 0;
     }
 
     /**

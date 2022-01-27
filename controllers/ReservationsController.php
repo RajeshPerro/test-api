@@ -62,10 +62,10 @@ class ReservationDetailsController extends Controller
                         $data['total_spot'] = $validation_result;
                         $reserve_model = new ReservationDetailsModel();
                         $response = $reserve_model->createReservation($data);
-
                         if($response){
                             $this->response_data =
-                                json_encode(array('message'=>'OK', 'success'=>true));
+                                json_encode(array('message'=>'OK',
+                                    'success'=>true,'created_reserve_id' => $response));
                             $this->header_with_code = 'HTTP/1.1 201 OK';
                         }
                         else{
@@ -129,8 +129,16 @@ class ReservationDetailsController extends Controller
                     $response = $reserve_model->updateReservation($id, $data);
 
                     if($response){
+                        $message = '';
+                        if($response == 1){
+                            $message = '1 spot cancelled!';
+                        }
+                        else{
+                            $message = "$response spots are cancelled!";
+                        }
+
                         $this->response_data =
-                            json_encode(array('message'=>"$response spots are cancelled!", 'success'=>true));
+                            json_encode(array('message'=>$message, 'success'=>true));
                     }
                     else{
                         $this->response_data =
@@ -174,7 +182,7 @@ class ReservationDetailsController extends Controller
                 }
                 else{
                     $this->error_message = 'Invalid credentials!';
-                    $this->header_with_code = 'HTTP/1.1 401 Internal Server Error';
+                    $this->header_with_code = 'HTTP/1.1 401';
                 }
             }catch (ErrorException $e){
                 $this->serverError($e->getMessage());

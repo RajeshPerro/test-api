@@ -24,7 +24,7 @@ class TripsController extends Controller
                 $response = $trip_model->createTrip($data);
                 if($response){
                     $this->response_data =
-                        json_encode(array('message'=>'Trip Created!', 'success'=>true));
+                        json_encode(array('message'=>'Trip Created!', 'success'=>true, 'created_trip_id'=>$response));
                     $this->header_with_code = 'HTTP/1.1 201 OK';
                 }
                 else{
@@ -65,7 +65,8 @@ class TripsController extends Controller
                 }
                 else{
                     $this->response_data =
-                        json_encode(array('message'=>'Invalid `id` param / No Data!', 'success'=>false));
+                        json_encode(array('message'=>'Invalid `id` param / No Data!',
+                            'success'=>false));
                 }
 
             }catch (ErrorException $e){

@@ -31,7 +31,7 @@ class UserController extends Controller {
                 }
                 else{
                     $this->response_data =
-                        json_encode(array('message'=>'Invalid `id` param / No Data!', 'success'=>false));
+                        json_encode(array('message'=>'Invalid id, No Data!', 'success'=>false));
                 }
 
             }catch (ErrorException $e){
@@ -61,7 +61,7 @@ class UserController extends Controller {
                 $response = $user_model->createUser($data);
                 if($response){
                     $this->response_data =
-                        json_encode(array('message'=>'User Created!', 'success'=>true));
+                        json_encode(array('message'=>'User Created!', 'success'=>true, 'created_user_id'=>$response));
                     $this->header_with_code = 'HTTP/1.1 201 OK';
                 }
                 else{
