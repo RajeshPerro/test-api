@@ -84,7 +84,9 @@ class ReserveActionsCest{
             'number_of_spots' => 5
         ];
 
-        /* Test Create Reserve, we are trying to create
+        /*
+         * Test #1
+        Test Create Reserve, we are trying to create
         with more space that we have created in Trip above
        */
         $I->sendPostAsJson('/reserve/create',$create_reserve_mutation_data);
@@ -96,7 +98,9 @@ class ReserveActionsCest{
             "success" => false
         ]);
 
-        /** Test Create Reserve, with proper data
+        /**
+         *Test #2
+         * Test Create Reserve, with proper data
          * We have created Trip above with total_spot = 1
          * So, this request should work, and we should be able to
           reserve the spot.
@@ -114,7 +118,9 @@ class ReserveActionsCest{
             "created_reserve_id" => self::$reserve_id
         ]);
 
-        /** Test Create Reserve, with proper data
+        /**
+         * Test #3
+         * Test Create Reserve, with proper data
          * We have created Trip above with total_spot = 1
          * and in previous request we have successfully reserved that spot!
          * So, this spot should show us the error message
@@ -149,7 +155,7 @@ class ReserveActionsCest{
             'number_of_spots' => 5
         ];
 
-        //Test-1 : We are trying to cancel more spots than we have!
+        //Test #4 : We are trying to cancel more spots than we have!
         $I->sendPutAsJson('/reserve/cancel/'.self::$reserve_id,$cancel_reserve_mutation_data);
         $I->seeResponseCodeIsSuccessful();
         $I->seeResponseCodeIs(200);
@@ -160,7 +166,7 @@ class ReserveActionsCest{
         ]);
 
         /**
-         * Test-2 : We are actually Cancelling the reservation this time!
+         * Test #5 : We are actually Cancelling the reservation this time!
             also testing flexible reservation by passing params
          */
         $cancel_reserve_mutation_data['number_of_spots'] = 1;
@@ -174,7 +180,7 @@ class ReserveActionsCest{
         ]);
 
         /**
-         * Test-3 : Now we are booking that cancelled spot
+         * Test #6: Now we are booking that cancelled spot
             by the logic it should allow us to do such operation
          */
         $I->sendPostAsJson('/reserve/create',[
