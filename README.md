@@ -113,8 +113,20 @@ JSON input
 
 ```
 
-- ELSE : ``` $host/test-api/index.php/reserve/cancel/{id}``` <br>
+- ELSE : ``` $host/test-api/index.php/reserve/cancel/{id}``` <br><br>
+*** Bonus ***<br>
+ As a trip admin, you can see who has reserved how many spots on the trip <br>
+* GET : ```$host/test-api/index.php/reserve/get ``` <br>
+ You have to pass Header data to validate Admin!
 
+```
+
+"headers": "username: admin\npassword: 4699c34482129452703a7d58e1a4849e\n"
+
+```
+- NB : username and password can be updated by app.ini file.
+
+<br>
 **** IF YOU ARE USING POSTMAN ****** <br>
 - Download the [API.JSON](https://drive.google.com/uc?export=view&id=1qPSp-05s4PXqw6PbsmRcKJVCul4jbyTX) and import it into your POSTMAN
 
