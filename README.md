@@ -5,8 +5,8 @@ Project guide will help you understand W.W.H : Why? What? and How? <br>
 Why and How the architecture / system design has been done, <br> Based on What all the decisions has been taken, <br> and then how it has been implemented. <br>
 
 How to use the APIs?<br>
-If you have already LAMP Server then you are almost done!<br>
-If no then based on your Operating system please install <br>
+If you already have a LAMP Server then you are almost done!<br>
+If no then based on your Operating system please install these<br>
 
 - Apache 
 - Mysql
@@ -14,29 +14,38 @@ If no then based on your Operating system please install <br>
 
 Windows : You can use XAMPP. It's very simple. <br>
 Instructions can be found here <br>
-* Windows : https://www.configserverfirewall.com/windows-10/install-xampp-on-windows/<br>
-* Linux : https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-ubuntu-18-04 <br>
-* OSX : https://betterprogramming.pub/install-apache-mysql-php-macos-mojave-10-14-b6b5c00b7de  <br>
+* [Windows](https://www.configserverfirewall.com/windows-10/install-xampp-on-windows/) <br>
+* [Linux](https://www.digitalocean.com/community/tutorials/how-to-install-linux-apache-mysql-php-lamp-stack-ubuntu-18-04) <br>
+* [OSX](https://betterprogramming.pub/install-apache-mysql-php-macos-mojave-10-14-b6b5c00b7de)  <br>
 
 Now, once you are done with installation, clone the repo to your localhost <br>
 * Windows & Xampp => htdocs directory
 * Linux (Ubuntu) => /var/www/html
 * Mac => /Library/WebServer/Documents/
 
-*** Create a database and take the ```rest_api_demo.sql``` file from repo and import it in your MySQL Database.***<br>
+*** Create a database in your mysql server <br> 
+- If necessary check [How to create database from MySQL CLI](https://www.inmotionhosting.com/support/server/databases/create-a-mysql-database/)
+- Once you have the database import the sql file
+* To load the sql in your newly created DB For Unix
+```
+mysql db_name < rest_api_demo.sql
+
+```
+<br>
 
 ****YES!! you are ready to run the APIs****<br><br>
 Go to your browser / any other application which can run API as like Postman<br>
 if you have already working ```localhost (127.0.0.1)```<br>
-- In URL : localhost/test-api/index.php/{module_name}/{action_name} <br>
-Example : localhost/test-api/index.php/user/get => It will return all the users you have in your DB<br><br>
+- In URL : 
+``` localhost/test-api/index.php/{module_name}/{action_name} ``` <br>
+Example : ``` localhost/test-api/index.php/user/get``` <br> It will return all the users you have in your DB<br><br>
 
 ********* List of APIs we have *********<br>
 We have API for<br>
 * USER ## 
-- GET : $host/test-api/index.php/get
-- GET : $host/test-api/index.php/get/{id}
-- POST : $host/test-api/index.php/user/create <br>
+- GET : ``` $host/test-api/index.php/get ```
+- GET : ``` $host/test-api/index.php/get/{id} ```
+- POST : ``` $host/test-api/index.php/user/create ``` <br>
 ```
 JSON input 
 {
@@ -47,7 +56,7 @@ JSON input
 "address": "Lodz, Poland"
 }
 ```
-- PUT : $host/test-api/index.php/user/update/{id} <br>
+- PUT : ``` $host/test-api/index.php/user/update/{id} ``` <br>
 ```
 JSON input 
 {
@@ -56,13 +65,13 @@ JSON input
 "address": "Munich, Germany"
 }
 ```
-- DELETE : $host/test-api/index.php/user/delete/{id}
+- DELETE : ``` $host/test-api/index.php/user/delete/{id} ```
 <br>
 
 * TRIP ##
-- GET : $host/test-api/index.php/trips/get<br>
-- GET : $host/test-api/index.php/trips/get/{id}<br>
-- POST : $host/test-api/index.php/trips/create <br>
+- GET : ``` $host/test-api/index.php/trips/get ``` <br>
+- GET : ``` $host/test-api/index.php/trips/get/{id} ``` <br>
+- POST : ``` $host/test-api/index.php/trips/create ``` <br>
 ```
 JSON input 
 {
@@ -73,7 +82,7 @@ JSON input
 "trip_date":"2022-03-11 11:00:00"
 }
 ```
-- PUT : $host/test-api/index.php/trips/update/{id} <br>
+- PUT : ``` $host/test-api/index.php/trips/update/{id} ``` <br>
 ```
 JSON input 
 {
@@ -83,7 +92,7 @@ JSON input
 <br>
 
 * Reserve ##
-- POST : $host/test-api/index.php/reserve/create <br>
+- POST : ``` $host/test-api/index.php/reserve/create ``` <br>
 ```
 
 JSON input 
@@ -94,7 +103,7 @@ JSON input
 }
 
 ```
-- PUT : $host/test-api/index.php/reserve/cancel/{id} <br>
+- PUT : ``` $host/test-api/index.php/reserve/cancel/{id}``` <br>
 - IF Flexible cancellation<br>
 ```
 JSON input 
@@ -104,7 +113,7 @@ JSON input
 
 ```
 
-- ELSE : $host/test-api/index.php/reserve/cancel/{id} <br>
+- ELSE : ``` $host/test-api/index.php/reserve/cancel/{id}``` <br>
 
 **** IF YOU ARE USING POSTMAN ****** <br>
 - Download the [API.JSON](https://drive.google.com/uc?export=view&id=1qPSp-05s4PXqw6PbsmRcKJVCul4jbyTX) and import it into your POSTMAN
