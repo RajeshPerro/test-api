@@ -2,7 +2,7 @@
 
 Before you start anything Please read [PROJECT GUIDE]( https://drive.google.com/uc?export=view&id=11wA9KtMVdpOPOqai-qW0NQWJFduvX8qz ) highly recommended! <br>
 Project guide will help you understand W.W.H : Why? What? and How? <br>
-The architecture has been made, decision has been taken, and how it has been implemented. <br>
+Why and How the architecture / system design has been done, <br> Based on What all the decisions has been taken, <br> and then how it has been implemented. <br>
 
 How to use the APIs?<br>
 If you have already LAMP Server then you are almost done!<br>
