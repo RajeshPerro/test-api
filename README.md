@@ -1,9 +1,5 @@
 # API
 
-Before you start anything Please read [PROJECT GUIDE]( https://drive.google.com/uc?export=view&id=1Tr6HQu7ts5ovt7dNExmEz9pEWeQHhmH- ) highly recommended! <br>
-Project guide will help you understand W.W.H : Why? What? and How? <br>
-Why and How the architecture / system design has been done, <br> Based on What all the decisions has been taken, <br> and then how it has been implemented. <br>
-
 How to use the APIs?<br>
 If you already have a LAMP Server then you are almost done!<br>
 If no then based on your Operating system please install these<br>
